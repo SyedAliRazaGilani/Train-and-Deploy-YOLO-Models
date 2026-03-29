@@ -2,6 +2,8 @@
 
 ## 🎓 Train and Deploy YOLO for candy detection and calorie estimation
 
+---
+
 This repository teaches **machine learning** and **computer vision** together. You **train** a deep-learning **object-detection** model ([Ultralytics YOLO](https://docs.ultralytics.com/)—convolutional neural networks trained with labeled images, validation metrics, and exported weights), then **deploy** it to **detect types of candy** in images or live video. Calorie and sugar totals come from a separate **lookup** keyed by each predicted class, not from the network itself. That lets you **keep a running tally of sweets in view**—for example, summing estimated intake when several brands are scattered on a desk or in a bowl.
 
 **What this is useful for:** a hands-on path from **labeling data → ML training → deployment**, with a concrete application—**dietary awareness and portion-style logging** (rough estimates from packaging data you supply) that show end-to-end ML, demos that combine vision with structured nutrition tables, or **comparing sugar and calories across mixes** of food. Treat outputs as **informative estimates**: accuracy depends on your trained model, lighting, and whether your nutrition table matches real serving sizes.
@@ -9,6 +11,8 @@ This repository teaches **machine learning** and **computer vision** together. Y
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb) · [Open in Colab (Train_YOLO_Models.ipynb)](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb)
 
 ### 📚 Training a custom YOLO model for candy detection (and sorting by type)
+
+---
 
 The full walkthrough is in **[Train_YOLO_Models.ipynb](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb)** ([open in Colab](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb#scrollTo=1sUfcA8ZgR2t)). Below is the candy-focused summary.
 
@@ -28,5 +32,7 @@ The full walkthrough is in **[Train_YOLO_Models.ipynb](https://colab.research.go
 **After training:** best weights land under the run folder (e.g. `runs/detect/train/weights/best.pt`); zip/download from Colab and use them locally with **`yolo_detect.py`** or build a small app on top of your weights as described below.
 
 ### 💡 From candy detections to calories
+
+---
 
 The camera model does **not** read calories from pixels. After YOLO detects each piece of candy, every detection has a **class** (for example Skittles vs. Snickers). You keep a **lookup table**—calories and sugar **per piece** for each class your model was trained on—and for each detection you add that row’s values. **Total calories** (and sugar) in view are simply the **sum** over all current detections, one serving entry per detected piece. The [examples/candy_calorie_counter](examples/candy_calorie_counter) script follows this pattern with a `nutrition_info` dictionary keyed by class name, filled from the model’s labels each frame.
