@@ -2,36 +2,28 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb) · [Open in Colab (Train_YOLO_Models.ipynb)](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb)
 
-### Training a custom YOLO model for candy detection (and sorting by type)
+## Training a custom YOLO model for candy detection
 
-The step-by-step notebook is **[Train_YOLO_Models.ipynb](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb)** ([open in Colab](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb#scrollTo=1sUfcA8ZgR2t)). It uses [Ultralytics](https://docs.ultralytics.com/) so you can train **YOLO11**, **YOLOv8**, or **YOLOv5** on your own images, then run the exported model on a PC, phone, or edge device like a Raspberry Pi.
+The step-by-step guide lives in **[Train_YOLO_Models.ipynb](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb)**—open it in [Google Colab](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb#scrollTo=1sUfcA8ZgR2t) so you get a Linux environment, Python, and (if you enable it) a GPU for training.
 
-**Google Colab** gives you a Linux machine in the browser with Python already set up. Turn on a **GPU** under *Runtime → Change runtime type*, then run each code cell with the Play button. The notebook’s table of contents (left sidebar) jumps between sections.
+That notebook uses [Ultralytics](https://docs.ultralytics.com/) to train a **custom object detection** model: you define classes for each candy type you care about (for example Skittles, Snickers, and other brands), and the model learns to draw a box around each piece and predict which class it is. When training finishes, you have a **`.pt` weights file** you can use for inference on new images or video.
 
-For **candy**, you define one **class** per type you care about (for example Skittles vs. Snickers). The model draws a box and a class name on each piece. Your app can then **count**, **group**, or **sort** results by that label—same idea as tallying or separating piles by brand.
+### Gathering and labeling candy images
 
-**Photos and labels.** A practical first dataset is on the order of **~200** images. Include mixed **backgrounds and lighting**, and some **random objects** in frame—not only candy on a blank desk—so the model generalizes. Label every candy instance in **YOLO format**. [Label Studio](https://labelstud.io/) is a solid free option; export so you have an **`images`** folder, a **`labels`** folder, and a **`classes.txt`** file listing class names. Zip that layout as **`data.zip`**, matching the structure shown in the notebook. If you only want to test the pipeline first, the notebook includes a **sample candy dataset** you can download instead of building your own.
+Before training, you need photos where candies appear and **YOLO-format labels** (one box per candy instance, with the correct class). A practical starting point for a proof-of-concept is on the order of **~200 images**. Pictures should not all look the same: include **different backgrounds and lighting**, and sometimes **other objects** in the frame so the model learns what “candy” means in real scenes.
 
-**Getting data into Colab.** You can upload **`data.zip`** from the Files panel, or copy it from **Google Drive** if the zip is large (over ~50 MB, Drive is usually easier). Unzip into a folder (the notebook uses something like `custom_data`), then run this repo’s **[`utils/train_val_split.py`](utils/train_val_split.py)** to put about **90%** of images in **train** and **10%** in **validation**, in the layout Ultralytics expects (`train` / `validation`, each with `images` and `labels`).
+You can take your own photos and label them, or start from a public dataset if one fits your classes. For labeling, tools like **[Label Studio](https://labelstud.io/)** are a good fit: you export a layout the notebook expects—typically an **`images`** folder, a **`labels`** folder with one `.txt` per image, and a **`classes.txt`** file listing every class name in order.
 
-**Config and training.** The notebook builds a **`data.yaml`** file from **`classes.txt`** so paths and class names match your folders. Install Ultralytics with `pip install ultralytics`, then start training. **Model size** (`yolo11n` … `yolo11xl`): bigger models are often more accurate but slower; **`yolo11s.pt`** is a reasonable default. **Epochs:** for fewer than ~200 images, **~60** epochs is a sensible starting point; for more images, try fewer (for example ~40). **Image size** **`imgsz`** is often **640**; smaller sizes can run faster if you need speed. You can swap **`yolo11`** for **`yolov8`** or **`yolov5`** in the train command if you prefer those families.
+When everything is ready, pack the dataset in the folder structure shown in the notebook, then **zip it as `data.zip`**. The notebook also describes how to use a **sample candy image dataset** so you can run the full train pipeline once before building your own set.
 
-**When training finishes**, let it run to completion—the notebook notes that a final optimizer step matters. The best weights are saved as something like **`runs/detect/train/weights/best.pt`**, with charts and logs beside them. You can run **predict** on your validation images inside Colab to spot-check boxes, then zip the model and download it.
+### Uploading data and splitting train / validation
 
-**On your machine**, use **`yolo_detect.py`** from this repo for webcam or files, or the **[candy calorie counter](examples/candy_calorie_counter)** example to map each detected class to calories and sugar—another way to use per-class “sorted” results.
+In Colab you move **`data.zip`** onto the machine—either upload it in the Files panel, or store it in **Google Drive**, mount the drive, and copy the zip into `/content` (handy if the zip is large). After unzip, you split images into **training** and **validation** sets. The notebook uses this repo’s **[`utils/train_val_split.py`](utils/train_val_split.py)** script to send about **90%** of samples to **train** and **10%** to **validation**, in the folder layout Ultralytics requires (each split has `images` and `labels` subfolders).
 
-## YOLO Application Examples
+### Config and training
 
-This folder contains example code showing different applications you can build around YOLO models.
+You install **Ultralytics** in the notebook (`pip install ultralytics`). The last setup step is a **`data.yaml`** file that points to your train/val paths and lists class names; the notebook builds that from **`classes.txt`**.
 
-### Candy Calorie Counter
+Training is run with the `yolo detect train` CLI. The notebook explains how to pick **model size** (for example `yolo11n` through `yolo11x`—larger is often more accurate but slower; **`yolo11s.pt`** is a reasonable default), **epochs** (for under ~200 images, **60** epochs is a suggested starting point; for more images, fewer epochs may be enough), and **image size** (often **640**; smaller sizes can be faster). You can also use **YOLOv8** or **YOLOv5** checkpoints instead of YOLO11 by swapping the `model=` argument.
 
-The [candy_calorie_counter](examples/candy_calorie_counter) example uses a custom YOLO model that's trained to identify popular types of candy (Skittles, Snickers, etc). When candy is placed in front of the camera, the application checks the number of calories and grams of sugar contained in each piece of candy, and it reports the total calories and sugar. It's a basic example of how to use detected object classes to look up information about each object.
-
-### Using YOLO With Multiple Cameras
-
-The [multi_camera](examples/multi_camera) example shows an efficient way to run YOLO models on multiple camera streams using Python multiprocessing.
-
-### Toggle Raspberry Pi GPIO - Smart Lamp
-
-The [toggle_pi_gpio](examples/toggle_pi_gpio) example shows how to set up a "smart lamp" that turns on when a person is detected within a certain area of the camera's view. This example is a useful starting point to see how to toggle the Raspberry Pi's General-Purpose Input/Output (GPIO) pins using YOLO and Python. It also shows how to work with detected object coordinates and make decisions based on where an object is located on the screen.
+Let training **finish completely**—the notebook notes that an optimizer step at the end matters for the exported weights. The best checkpoint is usually saved as something like **`runs/detect/train/weights/best.pt`**. The notebook’s later sections show how to **run prediction** on validation images to visually check boxes and labels, and how to **zip and download** the trained model for use outside Colab.
