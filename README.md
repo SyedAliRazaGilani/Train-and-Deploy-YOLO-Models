@@ -1,3 +1,9 @@
+## Train and Deploy YOLO for candy detection and calorie estimation
+
+This repository teaches you how to use **computer vision** with [Ultralytics YOLO](https://docs.ultralytics.com/) to **detect types of candy** in images or live video, then **derive calories (and sugar) for each kind** using a simple lookup keyed by the predicted class. That lets you **keep a running tally of sweets in view**—for example, summing estimated intake when several brands are scattered on a desk or in a bowl.
+
+**What this is useful for:** a hands-on path from **labeling data → training → deployment**, with a concrete application—**dietary awareness and portion-style logging** (rough estimates from packaging data you supply, not medical analysis), **demos and coursework** on object detection, **portfolio projects** that combine vision with structured nutrition tables, or **comparing sugar and calories across mixes** of candy for curiosity or education. Treat outputs as **informative estimates**: accuracy depends on your model, lighting, and whether your nutrition table matches real serving sizes.
+
 ![Train and Deploy YOLO Models](doc/Readmeimg.png)
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb) · [Open in Colab (Train_YOLO_Models.ipynb)](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb)
