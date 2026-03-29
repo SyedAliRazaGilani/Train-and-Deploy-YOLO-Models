@@ -1,10 +1,10 @@
+![Train and Deploy YOLO Models](doc/Readmeimg.png)
+
 ## Train and Deploy YOLO for candy detection and calorie estimation
 
 This repository teaches **machine learning** and **computer vision** together. You **train** a deep-learning **object-detection** model ([Ultralytics YOLO](https://docs.ultralytics.com/)—convolutional neural networks trained with labeled images, validation metrics, and exported weights), then **deploy** it to **detect types of candy** in images or live video. Calorie and sugar totals come from a separate **lookup** keyed by each predicted class, not from the network itself. That lets you **keep a running tally of sweets in view**—for example, summing estimated intake when several brands are scattered on a desk or in a bowl.
 
-**What this is useful for:** a hands-on path from **labeling data → ML training → deployment**, with a concrete application—**dietary awareness and portion-style logging** (rough estimates from packaging data you supply, not medical analysis), **coursework or portfolio** pieces that show end-to-end ML, demos that combine vision with structured nutrition tables, or **comparing sugar and calories across mixes** of candy for curiosity or education. Treat outputs as **informative estimates**: accuracy depends on your trained model, lighting, and whether your nutrition table matches real serving sizes.
-
-![Train and Deploy YOLO Models](doc/Readmeimg.png)
+**What this is useful for:** a hands-on path from **labeling data → ML training → deployment**, with a concrete application—**dietary awareness and portion-style logging** (rough estimates from packaging data you supply) that show end-to-end ML, demos that combine vision with structured nutrition tables, or **comparing sugar and calories across mixes** of food. Treat outputs as **informative estimates**: accuracy depends on your trained model, lighting, and whether your nutrition table matches real serving sizes.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb) · [Open in Colab (Train_YOLO_Models.ipynb)](https://colab.research.google.com/github/SyedAliRazaGilani/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb)
 
