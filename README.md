@@ -19,20 +19,8 @@ The full walkthrough is in **[Train_YOLO_Models.ipynb](https://colab.research.go
 - Upload **`data.zip`** (Colab upload or Google Drive), unzip it, then run the repo’s **[`utils/train_val_split.py`](utils/train_val_split.py)** (as in the notebook) to split roughly **90% train / 10% validation** into the structure Ultralytics expects (`train` / `validation`, each with `images` and `labels`).
 - Auto-generate **`data.yaml`** from **`classes.txt`**, install **Ultralytics**, and train—for a smaller dataset (under ~200 images), the notebook suggests a starting point such as **`yolo11s.pt`**, **`epochs=60`**, **`imgsz=640`** (adjust if your dataset is larger or you need faster inference).
 
-**After training:** best weights land under the run folder (e.g. `runs/detect/train/weights/best.pt`); zip/download from Colab and use them locally with **`yolo_detect.py`** or the **Candy Calorie Counter** example below, which maps detected classes to nutrition info—another way to use per-class results.
+**After training:** best weights land under the run folder (e.g. `runs/detect/train/weights/best.pt`); zip/download from Colab and use them locally with **`yolo_detect.py`** or build a small app on top of your weights as described below.
 
-## YOLO Application Examples
+### From candy detections to calories
 
-This folder contains example code showing different applications you can build around YOLO models.
-
-### Candy Calorie Counter
-
-The [examples/candy_calorie_counter](examples/candy_calorie_counter) example uses a custom YOLO model that is trained to identify popular types of candy (Skittles, Snickers, and so on). When candy is placed in front of the camera, the application checks the number of calories and grams of sugar in each piece of candy and reports the total calories and sugar. It is a basic example of how to use detected object classes to look up information about each object.
-
-### Using YOLO With Multiple Cameras
-
-The [examples/multi_camera](examples/multi_camera) example shows an efficient way to run YOLO models on multiple camera streams using Python multiprocessing.
-
-### Toggle Raspberry Pi GPIO — Smart Lamp
-
-The [examples/toggle_pi_gpio](examples/toggle_pi_gpio) example shows how to set up a “smart lamp” that turns on when a person is detected within a certain area of the camera’s view. It is a useful starting point for toggling the Raspberry Pi’s GPIO pins with YOLO and Python, and for working with detected object coordinates and decisions based on where an object appears on the screen.
+The camera model does **not** read calories from pixels. After YOLO detects each piece of candy, every detection has a **class** (for example Skittles vs. Snickers). You keep a **lookup table**—calories and sugar **per piece** for each class your model was trained on—and for each detection you add that row’s values. **Total calories** (and sugar) in view are simply the **sum** over all current detections, one serving entry per detected piece. The [examples/candy_calorie_counter](examples/candy_calorie_counter) script follows this pattern with a `nutrition_info` dictionary keyed by class name, filled from the model’s labels each frame.
